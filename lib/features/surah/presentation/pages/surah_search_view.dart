@@ -73,6 +73,7 @@ class _SurahSearchViewState extends State<SurahSearchView> {
                       ayahFieldFocusNode.unfocus();
                       ayahFieldController.clear();
                       SurahSearchView.getAyatHelperModel.surahId = value == null ? 0 : value.id;
+                      SurahSearchView.getAyatHelperModel.ayahId = null;
                       setState(() {});
                       return;
                     },
