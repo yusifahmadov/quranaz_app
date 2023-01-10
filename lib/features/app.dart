@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quranazapp/features/home/presentation/pages/home_page_view.dart';
-import 'package:quranazapp/features/surah/presentation/pages/surah_page_view.dart';
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
 
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  @override
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
