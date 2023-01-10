@@ -22,7 +22,7 @@ class OneAyahDataFailed extends AyahState {
 }
 
 class AyatDataLoaded extends AyahState {
-  final List<AyahModel> data;
+  final OneSurahModel data;
   const AyatDataLoaded({required this.data});
 }
 

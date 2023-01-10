@@ -40,11 +40,11 @@ class AyahSearchPageView extends StatelessWidget {
                     child: Text(state.data.success.toString()),
                   );
                 } else if (state is AyatDataLoaded) {
-                  return state.data.isNotEmpty
+                  return state.data.ayahs.isNotEmpty
                       ? Expanded(
                           child: ListView.builder(
                               shrinkWrap: false,
-                              itemCount: state.data.length,
+                              itemCount: state.data.ayahs.length,
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
@@ -55,12 +55,13 @@ class AyahSearchPageView extends StatelessWidget {
                                       navigatorKey.currentState?.push(PageRouteBuilder(
                                           pageBuilder: (_, __, ___) => AyahDetailPageView(
                                               getOneAyahHelperModel: GetOneAyahHelperModel(
-                                                  ayahId: state.data[index].ayah,
+                                                  ayahId: state.data.ayahs[index].ayah,
                                                   translatorId:
                                                       SurahSearchView.getAyatHelperModel.translatorId,
-                                                  surahId: state.data[index].soorah),
+                                                  surahId: state.data.ayahs[index].soorah),
                                               surahModel: surahList
-                                                  .where((element) => element.id == state.data[index].ayah)
+                                                  .where(
+                                                      (element) => element.id == state.data.ayahs[index].ayah)
                                                   .first)));
                                     },
                                     child: Row(
@@ -68,8 +69,8 @@ class AyahSearchPageView extends StatelessWidget {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         IntrinsicWidth(
-                                          stepHeight: state.data[index].content.length / 45 * 25,
-                                          stepWidth: state.data[index].id.toString().length * 10,
+                                          stepHeight: state.data.ayahs[index].content.length / 45 * 25,
+                                          stepWidth: state.data.ayahs[index].id.toString().length * 10,
                                           child: Container(
                                             width: 20,
                                             decoration: BoxDecoration(
@@ -77,7 +78,7 @@ class AyahSearchPageView extends StatelessWidget {
                                                 borderRadius: BorderRadius.circular(6)),
                                             child: Center(
                                                 child: Text(
-                                                    "${state.data[index].soorah}:${state.data[index].ayah}")),
+                                                    "${state.data.ayahs[index].soorah}:${state.data.ayahs[index].ayah}")),
                                           ),
                                         ),
                                         const SizedBox(
@@ -86,7 +87,7 @@ class AyahSearchPageView extends StatelessWidget {
                                         Flexible(
                                           child: RichText(
                                             text: TextSpan(
-                                              children: highlightOccurrences(state.data[index].content,
+                                              children: highlightOccurrences(state.data.ayahs[index].content,
                                                   SurahSearchView.getAyatHelperModel.word ?? ""),
                                               style: Theme.of(context).textTheme.bodyText2,
                                             ),
