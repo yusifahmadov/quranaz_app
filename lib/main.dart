@@ -8,6 +8,7 @@ import 'injection.dart' as injection;
 Future<void> main() async {
   await injection.initalize();
   WidgetsFlutterBinding.ensureInitialized();
+
   BlocOverrides.runZoned(
       () => {
             runApp(MaterialApp(
