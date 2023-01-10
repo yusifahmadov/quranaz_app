@@ -1,17 +1,18 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:quranazapp/core/constant.dart';
 import 'package:quranazapp/features/ayah/data/models/helper/get_ayat_helper_model.dart';
-import 'package:quranazapp/features/ayah/data/models/helper/get_one_ayah_helper_model.dart';
 import 'package:quranazapp/features/ayah/presentation/bloc/ayah_bloc.dart';
 import 'package:quranazapp/features/ayah/presentation/bloc/ayah_cubit.dart';
-import 'package:quranazapp/features/ayah/presentation/pages/ayah_detail_page_view.dart';
 import 'package:quranazapp/features/surah/data/models/surah_model.dart';
 
 import '../../../../injection.dart';
 import '../../../surah/presentation/pages/surah_search_view.dart';
+import '../utility/number_suffix.dart';
 
 class AyahPageView extends StatelessWidget {
   final SurahModel surahModel;
@@ -19,6 +20,19 @@ class AyahPageView extends StatelessWidget {
   AyahPageView({Key? key, required this.surahModel}) : super(key: key);
   GetAyatHelperModel getAyatHelperModel =
       GetAyatHelperModel(surahId: 0, translatorId: SurahSearchView.getAyatHelperModel.translatorId);
+  Color randomColorGenerator() {
+    List<Color> colorList = [
+      const Color(0xff3590DC),
+      const Color(0xff6674CD),
+      const Color(0xff9561E2),
+      const Color(0xffF66C9A),
+      const Color(0xffF6993E),
+      const Color(0xff55C880),
+      const Color(0xff4DC0B5)
+    ];
+    return colorList[Random().nextInt(7)];
+  }
+
   @override
   Widget build(BuildContext context) {
     getAyatHelperModel.surahId = surahModel.id;
@@ -112,47 +126,74 @@ class AyahPageView extends StatelessWidget {
                   return Expanded(
                       child: ListView.builder(
                           shrinkWrap: false,
-                          itemCount: state.data.length,
+                          itemCount: state.data.ayahs.length,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
-                              child: GestureDetector(
-                                onTap: () {
-                                  navigatorKey.currentState?.push(PageRouteBuilder(
-                                      pageBuilder: (_, __, ___) => AyahDetailPageView(
-                                          getOneAyahHelperModel: GetOneAyahHelperModel(
-                                              ayahId: state.data[index].ayah,
-                                              translatorId: SurahSearchView.getAyatHelperModel.translatorId,
-                                              surahId: state.data[index].soorah),
-                                          surahModel: surahModel)));
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    IntrinsicWidth(
-                                      stepHeight: state.data[index].content.length / 45 * 25,
-                                      stepWidth: state.data[index].id.toString().length * 10,
-                                      child: Container(
-                                        width: 20,
-                                        decoration: BoxDecoration(
-                                            color: const Color(0xffE4E7EB),
-                                            borderRadius: BorderRadius.circular(6)),
-                                        child: Center(child: Text(state.data[index].ayah.toString())),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 6,
-                                    ),
-                                    Flexible(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    "${surahModel.id}. ${surahModel.title} surəsi, ${NumberSuffix.show(state.data.ayahs[index].ayah)} ayə",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(color: const Color(0xff9BA3AF), fontSize: 18),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: SizedBox(
+                                      width: 1.sh,
                                       child: Text(
-                                        state.data[index].content,
-                                        overflow: TextOverflow.fade,
-                                        maxLines: 10,
+                                        state.data.ayahDetails[index].content,
+                                        textAlign: TextAlign.right,
+                                        style: Theme.of(context).textTheme.overline!.copyWith(fontSize: 35),
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    state.data.ayahs[index].content,
+                                    style: Theme.of(context).textTheme.bodyText2!.copyWith(),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Divider(
+                                    thickness: 1,
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Wrap(
+                                      children: state.data.ayahDetails[index].transliteration
+                                          .split(" ")
+                                          .map((e) => Padding(
+                                                padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                                child: Text(
+                                                  e,
+                                                  softWrap: true,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText2!
+                                                      .copyWith(color: randomColorGenerator()),
+                                                ),
+                                              ))
+                                          .toList()),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
                               ),
                             );
                           }));
