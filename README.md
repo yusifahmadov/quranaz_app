@@ -9,4 +9,4 @@ Used packages:
 Bloc, flutter_bloc, equatable, get_it, retrofit, dio, google_fonts, flutter_screenutil, flutter_svg, dropdown_search, json_serializable,dartz
 
 Architecture:
-TDD Clean Architecture
+Reso Coder Clean Architecture
